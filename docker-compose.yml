@@ -169,9 +169,9 @@ services:
       SPRING_CLOUD_CONFIG_URI: http://config-server:8888
       CONFIG_SERVER_URL: http://config-server:8888/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      AZURE_OPENAI_KEY: ${AZURE_OPENAI_KEY}
-      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-demo}
+      AZURE_OPENAI_KEY: ${AZURE_OPENAI_KEY:-}
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-}
     command:
       - "--eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka/"
       - "--management.zipkin.tracing.endpoint=http://tracing-server:9411/api/v2/spans"
