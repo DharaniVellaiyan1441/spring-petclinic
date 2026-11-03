@@ -15,7 +15,7 @@ Fixes # (issue)
 
 - [ ] I have read the [CONTRIBUTING](../CONTRIBUTING.md) guide
 - [ ] **This is NOT coursework, a student assignment, or homework** — I understand that forks of this repo are widely used in courses and that student PRs will be closed without review
-- [ ] My change targets the `main` branch of **spring-petclinic/spring-petclinic-microservices**, not my own fork
+- [ ] My change targets the `main` branch of **DharaniVellaiyan1441/spring-petclinic**, not my own fork
 - [ ] I have tested this change locally
 - [ ] Existing tests pass (`./mvnw test`)
 
