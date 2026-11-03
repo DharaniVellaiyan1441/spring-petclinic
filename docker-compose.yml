@@ -5,6 +5,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=native
       - GIT_REPO=/config-repo
+      - CONFIG_SERVER_URL=http://config-server:8888/
     command:
       - "--eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka/"
       - "--management.zipkin.tracing.endpoint=http://tracing-server:9411/api/v2/spans"
@@ -16,7 +17,7 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD", "curl", "-I", "http://localhost:8888/actuator/health"]
+      test: ["CMD", "curl", "-I", "http://config-server:8888/actuator/health"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -28,6 +29,11 @@ services:
   discovery-server:
     image: spring-petclinic-discovery-server:v1
     container_name: discovery-server
+    environment:
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      CONFIG_SERVER_URL: http://config-server:8888/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
     command:
       - "--eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka/"
       - "--management.zipkin.tracing.endpoint=http://tracing-server:9411/api/v2/spans"
@@ -37,7 +43,7 @@ services:
         limits:
           memory: 512M
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761"]
+      test: ["CMD", "curl", "-f", "http://discovery-server:8761"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -58,6 +64,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker,mysql
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      CONFIG_SERVER_URL: http://config-server:8888/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/petclinic?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: petclinic
@@ -92,6 +99,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker,mysql
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      CONFIG_SERVER_URL: http://config-server:8888/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/petclinic?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: petclinic
@@ -126,6 +134,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker,mysql
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      CONFIG_SERVER_URL: http://config-server:8888/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/petclinic?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: petclinic
@@ -158,6 +167,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      CONFIG_SERVER_URL: http://config-server:8888/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       AZURE_OPENAI_KEY: ${AZURE_OPENAI_KEY}
@@ -189,6 +199,7 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      CONFIG_SERVER_URL: http://config-server:8888/
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
     command:
       - "--spring.application.name=api-gateway"
@@ -224,6 +235,11 @@ services:
   admin-server:
     image: spring-petclinic-admin-server:v1
     container_name: admin-server
+    environment:
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      SPRING_CLOUD_CONFIG_URI: http://config-server:8888
+      CONFIG_SERVER_URL: http://config-server:8888/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
     command:
       - "--eureka.client.serviceUrl.defaultZone=http://discovery-server:8761/eureka/"
       - "--management.zipkin.tracing.endpoint=http://tracing-server:9411/api/v2/spans"
