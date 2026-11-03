@@ -1,15 +1,15 @@
 # Distributed version of the Spring PetClinic Sample Application built with Spring Cloud and Spring AI
 
-[![Build Status](https://github.com/spring-petclinic/spring-petclinic-microservices/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-petclinic/spring-petclinic-microservices/actions/workflows/maven-build.yml)
+[![Build Status](https://github.com/DharaniVellaiyan1441/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/DharaniVellaiyan1441/spring-petclinic/actions/workflows/maven-build.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This project demonstrates how to split the classic Spring PetClinic sample application into **[microservices](http://www.martinfowler.com/articles/microservices.html)**, with a **Vue.js frontend** and a Spring AI-powered chatbot.
 To achieve that goal, it relies on Spring Boot, **Spring Cloud Gateway**, **Spring Cloud Circuit Breaker** with Resilience4j, **Spring Cloud Config**, Micrometer Tracing with Zipkin, Prometheus and Grafana for monitoring, 
 Spring Boot Admin, Chaos Monkey for Spring Boot,  and the Eureka Service Discovery from the [Spring Cloud Netflix](https://github.com/spring-cloud/spring-cloud-netflix) technology stack.
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/spring-petclinic/spring-petclinic-microservices)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/DharaniVellaiyan1441/spring-petclinic)
 
-[![Open in Codeanywhere](https://codeanywhere.com/img/open-in-codeanywhere-btn.svg)](https://app.codeanywhere.com/#https://github.com/spring-petclinic/spring-petclinic-microservices)
+[![Open in Codeanywhere](https://codeanywhere.com/img/open-in-codeanywhere-btn.svg)](https://app.codeanywhere.com/#https://github.com/DharaniVellaiyan1441/spring-petclinic)
 
 ## Starting services locally without Docker
 
@@ -28,7 +28,7 @@ If everything goes well, you can access the following services at given location
 
 You can tell Config Server to use your local Git repository by using `native` Spring profile and setting
 `GIT_REPO` environment variable, for example:
-`-Dspring.profiles.active=native -DGIT_REPO=/projects/spring-petclinic-microservices-config`
+`-Dspring.profiles.active=native -DGIT_REPO=/projects/spring-petclinic`
 
 ## Starting services locally with docker-compose
 In order to start entire infrastructure using Docker, you have to build images by executing
@@ -143,7 +143,7 @@ In order to start the microservice, perform the following steps:
 
 ## In case you find a bug/suggested improvement for Spring Petclinic Microservices
 
-Our issue tracker is available here: https://github.com/spring-petclinic/spring-petclinic-microservices/issues
+Our issue tracker is available here: https://github.com/DharaniVellaiyan1441/spring-petclinic/issues
 
 ## Database configuration
 
@@ -276,20 +276,19 @@ mvn generate-resources -P css
 The Spring Petclinic `main` branch in the main [spring-projects](https://github.com/spring-projects/spring-petclinic)
 GitHub org is the "canonical" implementation, currently based on Spring Boot and Thymeleaf.
 
-This [spring-petclinic-microservices](https://github.com/spring-petclinic/spring-petclinic-microservices/) project is one of the [several forks](https://spring-petclinic.github.io/docs/forks.html) 
-hosted in a special GitHub org: [spring-petclinic](https://github.com/spring-petclinic).
+This [spring-petclinic](https://github.com/DharaniVellaiyan1441/spring-petclinic) project is a fork of the [Spring Petclinic sample](https://spring-petclinic.github.io/docs/forks.html) and is configured for this repository.
 If you have a special interest in a different technology stack
 that could be used to implement the Pet Clinic then please join the community there.
 
 
 ## Contributing
 
-The [issue tracker](https://github.com/spring-petclinic/spring-petclinic-microservices/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
+The [issue tracker](https://github.com/DharaniVellaiyan1441/spring-petclinic/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
 
 For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <http://editorconfig.org>.
 
 
-[Configuration repository]: https://github.com/spring-petclinic/spring-petclinic-microservices-config
+[Configuration repository]: https://github.com/DharaniVellaiyan1441/spring-petclinic
 [Spring Boot Actuator Production Ready Metrics]: https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-metrics.html
 
 ## Supported by
