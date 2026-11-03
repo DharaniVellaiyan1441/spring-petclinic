@@ -6,7 +6,7 @@ COPY spring-petclinic-visits-service/src ./spring-petclinic-visits-service/src
 WORKDIR /build/spring-petclinic-visits-service
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=builder /build/spring-petclinic-visits-service/target/*.jar app.jar
 EXPOSE 8083

@@ -6,7 +6,7 @@ COPY spring-petclinic-genai-service/src ./spring-petclinic-genai-service/src
 WORKDIR /build/spring-petclinic-genai-service
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=builder /build/spring-petclinic-genai-service/target/*.jar app.jar
 EXPOSE 8084
