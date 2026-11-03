@@ -14,7 +14,7 @@ RUN mvn clean package -DskipTests
 # ==========================================
 # STAGE 2: The Slim Production Runtime
 # ==========================================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 COPY --from=builder /build/spring-petclinic-api-gateway/target/*.jar app.jar

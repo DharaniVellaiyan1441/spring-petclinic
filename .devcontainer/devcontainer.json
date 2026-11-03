@@ -1,7 +1,7 @@
 {
   "name": "Spring Petclinic Microservices",
   // Java Development Container Images https://mcr.microsoft.com/en-us/product/devcontainers/java/tags
-  "image": "mcr.microsoft.com/devcontainers/java:17-bullseye",
+  "image": "mcr.microsoft.com/devcontainers/java:21-bullseye",
   // Features list https://containers.dev/features
   "features": {
     "ghcr.io/devcontainers/features/java:1": {
