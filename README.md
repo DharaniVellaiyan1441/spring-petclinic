@@ -57,6 +57,35 @@ After starting services, it takes a while for API Gateway to be in sync with ser
 so don't be scared of initial Spring Cloud Gateway timeouts. You can track services availability using Eureka dashboard
 available by default at http://localhost:8761.
 
+## Jenkins CI/CD pipeline
+
+This repository includes a Jenkins pipeline at the root of the project (`Jenkinsfile`) for a complete CI/CD workflow:
+
+1. Check out the repository
+2. Build the Java microservices with Maven and run the unit tests
+3. Build the Docker images for each Spring PetClinic service
+4. Push the tagged images to Docker Hub (main/develop/release branches)
+5. Deploy the application using `docker compose` on the `main` branch
+
+### Jenkins configuration
+
+Before running the pipeline, configure the Jenkins controller with:
+
+- JDK 21 installed as a global tool named `JDK-21`
+- Maven installed as a global tool named `Maven` or updated in the pipeline configuration
+- A Docker Hub credential with the ID `dockerhub-creds`
+- Docker installed and available on the Jenkins agent
+
+Then create a new pipeline job and point it to this repository. The `Jenkinsfile` will automatically build, test, package, and deploy the application.
+
+Example local validation command:
+```bash
+./mvnw -B clean verify
+./mvnw -B clean install -P buildDocker -DskipTests
+```
+
+The Docker deploy step expects the Jenkins node to be able to run the `docker compose` command.
+
 The `main` branch uses an Eclipse Temurin with Java 21 as Docker base image.
 
 *NOTE: Under MacOSX or Windows, make sure that the Docker VM has enough memory to run the microservices. The default settings
