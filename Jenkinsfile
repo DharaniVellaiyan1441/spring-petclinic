@@ -34,7 +34,11 @@ pipeline {
 
         stage('Start MySQL') {
             steps {
-                bat 'docker compose up -d mysql'
+                bat '''
+                    docker compose down --remove-orphans || exit 0
+                    docker rm -f mysql-server 2>NUL || exit 0
+                    docker compose up -d mysql
+                '''
             }
         }
 
