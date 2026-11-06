@@ -20,9 +20,61 @@ pipeline {
             }
         }
 
-        stage('Build and Test') {
+        stage('Build Config Server') {
             steps {
-                bat 'mvnw.cmd -B clean verify'
+                bat 'mvnw.cmd -B -pl spring-petclinic-config-server -am clean package -DskipTests'
+            }
+        }
+
+        stage('Build Discovery Server') {
+            steps {
+                bat 'mvnw.cmd -B -pl spring-petclinic-discovery-server -am clean package -DskipTests'
+            }
+        }
+
+        stage('Start MySQL') {
+            steps {
+                bat 'docker compose up -d mysql'
+            }
+        }
+
+        stage('Build API Gateway + Admin Server') {
+            parallel {
+                stage('Build API Gateway') {
+                    steps {
+                        bat 'mvnw.cmd -B -pl spring-petclinic-api-gateway -am clean package -DskipTests'
+                    }
+                }
+                stage('Build Admin Server') {
+                    steps {
+                        bat 'mvnw.cmd -B -pl spring-petclinic-admin-server -am clean package -DskipTests'
+                    }
+                }
+            }
+        }
+
+        stage('Build Business Services') {
+            parallel {
+                stage('Build Customers Service') {
+                    steps {
+                        bat 'mvnw.cmd -B -pl spring-petclinic-customers-service -am clean package -DskipTests'
+                    }
+                }
+                stage('Build Vets Service') {
+                    steps {
+                        bat 'mvnw.cmd -B -pl spring-petclinic-vets-service -am clean package -DskipTests'
+                    }
+                }
+                stage('Build Visits Service') {
+                    steps {
+                        bat 'mvnw.cmd -B -pl spring-petclinic-visits-service -am clean package -DskipTests'
+                    }
+                }
+                stage('Build GenAI Service') {
+                    steps {
+                        bat 'mvnw.cmd -B -pl spring-petclinic-genai-service -am clean package -DskipTests'
+                    }
+                }
             }
         }
 
@@ -50,6 +102,7 @@ pipeline {
                 ]) {
                     bat '''
                         echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+
                         for %%I in (
                             spring-petclinic-admin-server
                             spring-petclinic-config-server
