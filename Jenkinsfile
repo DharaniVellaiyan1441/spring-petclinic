@@ -8,9 +8,8 @@ pipeline {
 
     environment {
         JAVA_HOME = tool 'JDK-21'
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
         MAVEN_OPTS = '-Dmaven.repo.local=.m2/repository'
-        REGISTRY = 'docker.io'
         IMAGE_TAG = "${env.BRANCH_NAME ?: 'dev'}-${env.BUILD_NUMBER}"
     }
 
@@ -23,13 +22,13 @@ pipeline {
 
         stage('Build and Test') {
             steps {
-                sh './mvnw -B clean verify'
+                bat 'mvnw.cmd -B clean verify'
             }
         }
 
         stage('Build Docker Images') {
             steps {
-                sh './mvnw -B clean install -P buildDocker -DskipTests'
+                bat 'mvnw.cmd -B clean install -P buildDocker -DskipTests'
             }
         }
 
@@ -49,23 +48,23 @@ pipeline {
                         passwordVariable: 'DOCKER_PASS'
                     )
                 ]) {
-                    sh '''
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-
-                        for image in \
-                            spring-petclinic-admin-server \
-                            spring-petclinic-config-server \
-                            spring-petclinic-customers-service \
-                            spring-petclinic-discovery-server \
-                            spring-petclinic-genai-service \
-                            spring-petclinic-vets-service \
-                            spring-petclinic-visits-service \
-                            spring-petclinic-api-gateway; do
-                            docker tag ${image}:v1 "$DOCKER_USER/${image}:${IMAGE_TAG}"
-                            docker push "$DOCKER_USER/${image}:${IMAGE_TAG}"
-                            docker tag ${image}:v1 "$DOCKER_USER/${image}:latest"
-                            docker push "$DOCKER_USER/${image}:latest"
-                        done
+                    bat '''
+                        echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                        for %%I in (
+                            spring-petclinic-admin-server
+                            spring-petclinic-config-server
+                            spring-petclinic-customers-service
+                            spring-petclinic-discovery-server
+                            spring-petclinic-genai-service
+                            spring-petclinic-vets-service
+                            spring-petclinic-visits-service
+                            spring-petclinic-api-gateway
+                        ) do (
+                            docker tag %%I:v1 %DOCKER_USER%/%%I:%IMAGE_TAG%
+                            docker push %DOCKER_USER%/%%I:%IMAGE_TAG%
+                            docker tag %%I:v1 %DOCKER_USER%/%%I:latest
+                            docker push %DOCKER_USER%/%%I:latest
+                        )
                     '''
                 }
             }
@@ -76,8 +75,8 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh '''
-                    docker compose down --remove-orphans || true
+                bat '''
+                    docker compose down --remove-orphans || exit 0
                     docker compose up -d --remove-orphans
                     docker compose ps
                 '''
@@ -87,7 +86,7 @@ pipeline {
 
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
+            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
         }
         success {
             echo 'Jenkins CI/CD pipeline completed successfully.'
@@ -97,4 +96,3 @@ pipeline {
         }
     }
 }
-
