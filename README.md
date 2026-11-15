@@ -48,8 +48,11 @@ For instance, if you target container images for an Apple M2, you could use the 
 ./mvnw clean install -P buildDocker -Dcontainer.platform="linux/arm64"
 ```
 
-Once images are ready, you can start them with a single command
-`docker compose up` or `podman-compose up`. 
+Once images are ready, install and start MySQL on your host, then start the application containers with
+`docker compose up` or `podman-compose up`. The Compose setup does not start a MySQL container; by default
+the services connect to MySQL on the host at `host.docker.internal:3306`. Configure the `petclinic` database
+and a MySQL account that the services can use before starting the application. You can override the database
+host, port, user, and password with `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, and `MYSQL_PASSWORD`.
 
 Containers startup order is coordinated with the `service_healthy` condition of the Docker Compose [depends-on](https://github.com/compose-spec/compose-spec/blob/main/spec.md#depends_on) expression 
 and the [healthcheck](https://github.com/compose-spec/compose-spec/blob/main/spec.md#healthcheck) of the service containers. 
@@ -180,14 +183,21 @@ In its default configuration, Petclinic uses an in-memory database (HSQLDB) whic
 A similar setup is provided for MySql in case a persistent database configuration is needed.
 Dependency for Connector/J, the MySQL JDBC driver is already included in the `pom.xml` files.
 
-### Start a MySql database
+### Use a local MySQL database
 
-You may start a MySql database with docker:
+Install and start MySQL on your host (for example, [MySQL Community Server](https://dev.mysql.com/downloads/)).
+The Compose services connect to `host.docker.internal:3306` by default, so MySQL does not need to run in a
+container. Ensure that the `petclinic` database exists or that the configured account can create it, and that
+the account is allowed to connect from Docker. The default credentials are `petclinic` / `petclinic`; override
+them if your local MySQL uses different credentials:
 
+```powershell
+$env:MYSQL_USER = "your-mysql-user"
+$env:MYSQL_PASSWORD = "your-mysql-password"
+docker compose up
 ```
-docker run -e MYSQL_ROOT_PASSWORD=petclinic -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:8.4.5
-```
-or download and install the MySQL database (e.g., MySQL Community Server 8.4.5 LTS), which can be found here: https://dev.mysql.com/downloads/
+
+Set `MYSQL_HOST` and `MYSQL_PORT` as needed if your MySQL server is not reachable at the default host and port.
 
 ### Use the Spring 'mysql' profile
 
@@ -198,12 +208,8 @@ By default, at startup, database schema will be created and data will be populat
 You may also manually create the PetClinic database and data by executing the `"db/mysql/{schema,data}.sql"` scripts of each 3 microservices. 
 In the `application.yml` of the [Configuration repository], set the `initialization-mode` to `never`.
 
-If you are running the microservices with Docker, you have to add the `mysql` profile into the [Dockerfile](docker/Dockerfile):
-```
-ENV SPRING_PROFILES_ACTIVE docker,mysql
-```
-In the `mysql section` of the `application.yml` from the [Configuration repository], you have to change 
-the host and port of your MySQL JDBC connection string. 
+The Compose configuration already activates the `mysql` profile for these services and passes the database
+connection settings through `SPRING_DATASOURCE_*` environment variables.
 
 ## Custom metrics monitoring
 

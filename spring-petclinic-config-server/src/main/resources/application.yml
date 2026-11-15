@@ -1,4 +1,6 @@
-server.port: 8888
+server:
+  port: 8888
+
 spring:
   profiles:
     active: native
@@ -8,5 +10,4 @@ spring:
         # Prefer a local filesystem repo so the config server works without internet access.
         # Set GIT_REPO to a custom config directory when needed, otherwise ./config-repo is used.
         native:
-          searchLocations: file:${GIT_REPO:../config-repo}
-
+          search-locations: file:${GIT_REPO:../config-repo}
